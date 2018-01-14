@@ -1,0 +1,41 @@
+
+ .background-game {
+    -fx-background-image: url("pics/bg_game.jpg");
+    -fx-background-size: 610px,600px;
+ }
+
+ .player-name {
+    -fx-text-color: #62BCFA;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+ }
+
+ .pane-normal {
+    -fx-background-color: #62BCFA;
+    -fx-background-radius: 1,1,1;
+    -fx-opacity: 0.8;
+ }
+
+ .pane-hit{
+    -fx-background-color: #C43235;
+    -fx-background-radius: 5,5,4;
+ }
+
+ .pane-miss{
+     -fx-background-color: #36403B;
+     -fx-background-radius: 5,5,4;
+ }
+
+ .pane-blender{
+     -fx-background-color: #36403B;
+ }
+
+ .dirBtn{
+     -fx-background-image: url("pics/dir.png");
+ }
+
+ .dirBtn2{
+     -fx-background-image: url("pics/dir.png");
+     -fx-background-color: #C43235;
+  }
