@@ -1,6 +1,6 @@
 
  .background-game {
-    -fx-background-image: url("pics/bg_game.jpg");
+    -fx-background-image: url("pics/bg-game.jpg");
     -fx-background-size: 610px,600px;
  }
 
@@ -10,6 +10,25 @@
     -fx-font-weight: bolder;
     -fx-opacity: 0.9;
  }
+
+ .btn-place {
+    -fx-background-image: url("pics/btn-wood.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-size: 17px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+    -fx-background-size: 150px;
+ }
+
+  .btn-dir{
+      -fx-background-image: url("pics/dirBtn-Block.png");
+      -fx-text-color: #62BCFA;
+      -fx-font-size: 15px;
+      -fx-font-family: sans-serif;
+      -fx-font-weight: bolder;
+      -fx-opacity: 0.9;
+  }
 
  .pane-normal {
     -fx-background-color: #62BCFA;
@@ -31,11 +50,4 @@
      -fx-background-color: #36403B;
  }
 
- .dirBtn{
-     -fx-background-image: url("pics/dir.png");
- }
 
- .dirBtn2{
-     -fx-background-image: url("pics/dir.png");
-     -fx-background-color: #C43235;
-  }
