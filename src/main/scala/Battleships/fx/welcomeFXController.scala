@@ -18,6 +18,8 @@ class welcomeFXController extends Initializable {
   @FXML private var rootpane: AnchorPane = _
   @FXML private var setupgame: AnchorPane = _
   @FXML private var game: AnchorPane = _
+  @FXML private var scoreboard: AnchorPane = _
+  @FXML private var credits: AnchorPane = _
 
   //Our Setupfields and Button
   @FXML private var battleNameLabel: Label = _
@@ -49,11 +51,6 @@ class welcomeFXController extends Initializable {
   //Blender
   @FXML private var blenderAnch: AnchorPane = _
   @FXML private var blender: Pane = _
-
-  //DEBUG
-  @FXML private var DEBUG_E: Button = _
-  @FXML private var DEBUG_B: Button = _
-  @FXML private var DEBUG_A: AnchorPane = _
 
   //Save our setupinfoin these vars
   var battleField_Size: Int = _
@@ -95,20 +92,21 @@ class welcomeFXController extends Initializable {
   def initGame(): Unit = {
     //HIDE OUR OTHER STATES
     setupgame.setVisible(false)
+    setupgame.setManaged(false)
     game.setVisible(false)
     game.setManaged(false)
     //game Starting
     gameStart.setVisible(false)
     gameStart.setManaged(false)
     //Disable our Blenders
-    blenderAnch.setVisible(false) //SIND JZ DISABLED bind ma noch a funktion dran
+    blenderAnch.setVisible(false) //SIND JZ DISABLED bind ma noch a funktion dran digga
     blenderAnch.setManaged(false)
-
-
-    //WENN FÜR GRAFIK DEBUGGING BENÖTIGT AUS TRUE SETZEN ODER LÖSCHEN
-    DEBUG_A.setManaged(false)
-    DEBUG_A.setVisible(false)
-    //////////////////////////////////////////////////////////////////
+    //Hide Scoreboard
+    scoreboard.setVisible(false)
+    scoreboard.setManaged(false)
+    //Hide Credits
+    credits.setVisible(false)
+    credits.setManaged(false)
   }
 
   @FXML private def startSetup(event: ActionEvent): Unit = {
@@ -116,12 +114,76 @@ class welcomeFXController extends Initializable {
     battleNameLabel.setText(gameName)
     println(gameName)// Name des Spiels wird weitergegeben
 
-    rootpane.getChildren.clear()
-    setupgame.setVisible(1 == 1)
-    setupgame.setManaged(1 == 1)
+    rootpane.setVisible(false)
+    rootpane.setManaged(false)
+    setupgame.setVisible(true)
+    setupgame.setManaged(true)
   }
 
-  @FXML private def startgame(event: ActionEvent): Unit = {
+  @FXML private def showScore(event: ActionEvent): Unit = {
+    rootpane.setVisible(false)
+    rootpane.setManaged(false)
+    scoreboard.setVisible(true)
+    scoreboard.setManaged(true)
+  }
+
+  @FXML private def showCredits(event: ActionEvent): Unit = {
+    rootpane.setVisible(false)
+    rootpane.setManaged(false)
+    credits.setVisible(true)
+    credits.setManaged(true)
+  }
+
+  @FXML private def gotoMenu(event: ActionEvent): Unit = {
+    //reset Anchorpanes
+    rootpane.setVisible(true)
+    rootpane.setManaged(true)
+    setupgame.setVisible(false)
+    setupgame.setManaged(false)
+    game.setVisible(false)
+    game.setManaged(false)
+    gameStart.setVisible(false)
+    gameStart.setManaged(false)
+    blenderAnch.setVisible(false)
+    blenderAnch.setManaged(false)
+    scoreboard.setVisible(false)
+    scoreboard.setManaged(false)
+    credits.setVisible(false)
+    credits.setManaged(false)
+
+    //reset game variables
+    length = 0
+    setupStatus = 0
+    shipDirection = -1
+    gameName = battleName()
+    loaded = true
+    gameStatus = 0
+
+    player1_battleships = 0
+    player1_cruisers = 0
+    player1_submarines = 0
+    player1_fleet = new Fleet(List(List(Position(0, 0))))
+    player1_zerstoert = 0
+    player1_fleet_orig = new Fleet(List(List(Position(0, 0))))
+
+    player2_battleships = 0
+    player2_cruisers = 0
+    player2_submarines = 0
+    player2_fleet = new Fleet(List(List(Position(0, 0))))
+    player2_zerstoert = 0
+    player2_fleet_orig = new Fleet(List(List(Position(0, 0))))
+
+    //reset color of grid
+    battleGrid.getChildren.forEach(node => node.setStyle("-fx-background-color: #62BCFA"))
+    player1_Grid.getChildren.forEach(node => node.setStyle("-fx-background-color: #62BCFA"))
+    player2_Grid.getChildren.forEach(node => node.setStyle("-fx-background-color: #62BCFA"))
+
+    //reset direction button
+    dirBtn.setText("")
+    dirBtn.setStyle("-fx-background-position: left top")
+  }
+
+  @FXML private def startEdit(event: ActionEvent): Unit = {
     if(battleShips.getText.isEmpty && cruisers.getText.isEmpty && submarines.getText.isEmpty) setupError.setText("You need ships to fight, fools!")
     else if(!isAllDigits(battleShips.getText) || !isAllDigits(cruisers.getText) || !isAllDigits(submarines.getText)) setupError.setText("Use numbers for the amount of ships, landlubber!")
     else if (player1Name.getText.isEmpty || player2Name.getText.isEmpty) setupError.setText("You do not even know your own names?")
@@ -142,7 +204,8 @@ class welcomeFXController extends Initializable {
       player2.setName(player2Name.getText)
 
       //NOW SETUP THE GAME
-      setupgame.getChildren.clear()
+      setupgame.setVisible(false)
+      setupgame.setManaged(false)
       game.setVisible(true)
       game.setManaged(true)
       setupStatus = 1
@@ -153,7 +216,7 @@ class welcomeFXController extends Initializable {
       player1_cruisers = cruisers_Amount
       player1_submarines = submarines_Amount
 
-      //Set Player2VARS
+      //Set Player2 VARS
       player2_battleships = battleShips_Amount
       player2_cruisers = cruisers_Amount
       player2_submarines = submarines_Amount
@@ -222,7 +285,7 @@ class welcomeFXController extends Initializable {
                 Ship = Ship ::: List(Position(i+1,y+1))
                 i = i - 1
               }
-              shipPlacement(Ship)
+              shipPlacement(Ship, node)
             }
           }
           case 1 => {
@@ -234,7 +297,7 @@ class welcomeFXController extends Initializable {
                 Ship = Ship ::: List(Position(x+1,i+1))
                 i = i - 1
               }
-              shipPlacement(Ship)
+              shipPlacement(Ship, node)
             }
           }
           case 2 => {
@@ -246,7 +309,7 @@ class welcomeFXController extends Initializable {
                 Ship = Ship ::: List(Position(i + 1, y + 1))
                 i = i + 1
               }
-              shipPlacement(Ship)
+              shipPlacement(Ship, node)
             }
           }
           case 3 => {
@@ -258,7 +321,7 @@ class welcomeFXController extends Initializable {
                 Ship = Ship ::: List(Position(x+1,i+1))
                 i = i + 1
               }
-              shipPlacement(Ship)
+              shipPlacement(Ship, node)
             }
           }
         }
@@ -267,24 +330,27 @@ class welcomeFXController extends Initializable {
     else println("Select a Ship first")
   }
 
-  def shipPlacement(Ship: List[Position]): Unit = {
-    if (setupStatus == 1) {
-      if (hasSimiliarEntitites(Ship, player1_fleet.shipsPos)) setupLabel.setText("There is already a Ship!")
-      else {
-        Ship.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y - 1 == 0) null else coords.y - 1, battleGrid).setStyle("-fx-background-color: #36403B"))
-        player1_fleet.addShip(List(Ship)) //duplicate Code otherwhise ship will not be added watch how code gets executed!
-        shipReduction() //afterwards is ESSENTIAL DO NOT TOUCH PLS
+  def shipPlacement(Ship: List[Position], node: Node): Unit = {
+    if (node.toString == "Grid hgap=5.0, vgap=5.0, alignment=TOP_LEFT") println("gap")
+    else {
+      if (setupStatus == 1) {
+        if (hasSimiliarEntitites(Ship, player1_fleet.shipsPos)) setupLabel.setText("There is already a Ship!")
+        else {
+          Ship.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y - 1 == 0) null else coords.y - 1, battleGrid).setStyle("-fx-background-color: #36403B"))
+          player1_fleet.addShip(List(Ship)) //duplicate Code otherwhise ship will not be added watch how code gets executed!
+          shipReduction() //afterwards is ESSENTIAL DO NOT TOUCH PLS
+        }
       }
-    }
-    else if (setupStatus == 3) {
-      if (hasSimiliarEntitites(Ship, player2_fleet.shipsPos)) println("There is a Ship already.")
-      else {
-        Ship.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y - 1 == 0) null else coords.y - 1, battleGrid).setStyle("-fx-background-color: #36403B"))
-        player2_fleet.addShip(List(Ship)) //duplicate Code otherwhise ship will not be added watch how code gets executed!
-        shipReduction() //afterwards is ESSENTIAL DO NOT TOUCH PLS
+      else if (setupStatus == 3) {
+        if (hasSimiliarEntitites(Ship, player2_fleet.shipsPos)) println("There is a Ship already.")
+        else {
+          Ship.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y - 1 == 0) null else coords.y - 1, battleGrid).setStyle("-fx-background-color: #36403B"))
+          player2_fleet.addShip(List(Ship)) //duplicate Code otherwhise ship will not be added watch how code gets executed!
+          shipReduction() //afterwards is ESSENTIAL DO NOT TOUCH PLS
+        }
       }
+      else println("Select a Ship first")
     }
-    else println("Select a Ship first")
   }
 
   def shipPlaceCheck(): Boolean = {
@@ -615,23 +681,6 @@ class welcomeFXController extends Initializable {
 
   }
 
-  @FXML def DEBUGB(event: ActionEvent): Unit = {
-    gameStart.setManaged(true)
-    gameStart.setVisible(true)
-    rootpane.setManaged(false)
-    rootpane.setVisible(false)
-    game.setManaged(false)
-    game.setVisible(false)
-  }
-
-  @FXML def DEBUGE(event: ActionEvent): Unit = {
-    game.setManaged(true)
-    game.setVisible(true)
-    rootpane.setManaged(false)
-    rootpane.setVisible(false)
-    gameStart.setManaged(false)
-    gameStart.setVisible(false)
-  }
   //HELPING FUNCTIONS
   def existIn (elem1 : Any, elem2 : List[Any]): Boolean = {
     elem2.length match{
