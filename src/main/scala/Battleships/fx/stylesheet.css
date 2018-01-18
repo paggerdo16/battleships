@@ -30,6 +30,12 @@
       -fx-opacity: 0.9;
   }
 
+  .btn-save{
+    -fx-background-image: url("pics/save.png");
+    -fx-background-size: 30px,30px;
+    -fx-opacity: 0.8;
+  }
+
  .pane-normal {
     -fx-background-color: #62BCFA;
     -fx-background-radius: 1,1,1;
