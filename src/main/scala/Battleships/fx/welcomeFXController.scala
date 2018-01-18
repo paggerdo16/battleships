@@ -41,6 +41,7 @@ class welcomeFXController extends Initializable {
   @FXML private var placeCruiser: Button = _
   @FXML private var placeSubmarine: Button = _
   @FXML private var dirBtn: Button = _
+  @FXML private var confBtn: Button = _
 
   //BattleGridPanes and needed fields
   @FXML private var gameStart: AnchorPane = _
@@ -85,7 +86,7 @@ class welcomeFXController extends Initializable {
   var player2_fleet_orig: Fleet = new Fleet(List(List(Position(0, 0))))
 
   //TURNINFO
-  var turn : Int = 0
+  var turn : Int = -1
 
   override def initialize(url: URL, rb: ResourceBundle): Unit = initGame()
 
@@ -158,6 +159,7 @@ class welcomeFXController extends Initializable {
     gameName = battleName()
     loaded = true
     gameStatus = 0
+    turn = -1
 
     player1_battleships = 0
     player1_cruisers = 0
@@ -165,6 +167,10 @@ class welcomeFXController extends Initializable {
     player1_fleet = new Fleet(List(List(Position(0, 0))))
     player1_zerstoert = 0
     player1_fleet_orig = new Fleet(List(List(Position(0, 0))))
+    player1.hits = List()
+    player1.noHits = List()
+    player1.shots = List()
+    player1.takenshots = 0
 
     player2_battleships = 0
     player2_cruisers = 0
@@ -172,6 +178,10 @@ class welcomeFXController extends Initializable {
     player2_fleet = new Fleet(List(List(Position(0, 0))))
     player2_zerstoert = 0
     player2_fleet_orig = new Fleet(List(List(Position(0, 0))))
+    player2.hits = List()
+    player2.noHits = List()
+    player2.shots = List()
+    player2.takenshots = 0
 
     //reset color of grid
     battleGrid.getChildren.forEach(node => node.setStyle("-fx-background-color: #62BCFA"))
@@ -259,6 +269,16 @@ class welcomeFXController extends Initializable {
         shipDirection = 0
       }
     }
+  }
+
+  @FXML private def confirm(event: ActionEvent): Unit = {
+    if (player1_submarines + player1_cruisers + player1_battleships == 0 && setupStatus == 1 ) changePlayerSetup()
+    else if (player2_submarines + player2_cruisers + player2_battleships == 0) {
+      player1_fleet_orig.shipsPos = player1_fleet.shipsPos  //FOR LOADING FUNCTION
+      player2_fleet_orig.shipsPos = player2_fleet.shipsPos
+      prepGame()
+    }
+    else setupLabel.setText("Place all ships to confirm!")
   }
 
   @FXML private def getcord(event: MouseEvent): Unit = {
@@ -392,7 +412,7 @@ class welcomeFXController extends Initializable {
           }
         }
       }
-      if (player1_submarines + player1_cruisers + player1_battleships == 0) changePlayerSetup()
+      //if (player1_submarines + player1_cruisers + player1_battleships == 0) changePlayerSetup()
     }
     else { //setupstatus is not one and this function gets called means player 2 is setting up
       length match {
@@ -409,10 +429,9 @@ class welcomeFXController extends Initializable {
           placeSubmarine.setText("Submarines: " + player2_submarines.toString)
         }
       }
-      if (player2_submarines + player2_cruisers + player2_battleships == 0) {
-
+      /*if (player2_submarines + player2_cruisers + player2_battleships == 0) {
         prepGame()
-      }
+      }*/
     }
   }
 
@@ -455,9 +474,8 @@ class welcomeFXController extends Initializable {
     game.setManaged(false)
     //fifty fifty wer startet
     val starter = scala.util.Random
-    gameStatus = starter.nextInt(2) //kann 0 oder eins annehmen //wir könnten damit alle wenn gerade player 1 wenn ungerade player 2 für wer ist gerade dran
-    player1_fleet_orig = player1_fleet
-    player2_fleet_orig = player2_fleet
+    if(turn < 0) gameStatus = starter.nextInt(2)  //kann 0 oder eins annehmen //wir könnten damit alle wenn gerade player 1 wenn ungerade player 2 für wer ist gerade dran
+
     startgame(gameStatus)
   }
 
@@ -477,14 +495,14 @@ class welcomeFXController extends Initializable {
     gameStart.setManaged(true)
     gameStart.setVisible(true)
     if (isEven(starter)) { //player 1 ones turn so player 2 Grid is active
-      turnLabel.setText(player1.name + " starts!")
+      turnLabel.setText(player2.name + " starts!")
       player1_Grid.setManaged(false)
       player1_Grid.setVisible(false)
       player2_Grid.setManaged(true)
       player2_Grid.setVisible(true)
     }
     if (!isEven(starter)) { //player 2 ones turn so player 1 Grid is active
-      turnLabel.setText(player2.name + " starts!")
+      turnLabel.setText(player1.name + " starts!")
       player1_Grid.setManaged(true)
       player1_Grid.setVisible(true)
       player2_Grid.setManaged(false)
@@ -493,7 +511,7 @@ class welcomeFXController extends Initializable {
   }
 
   @FXML private def shootGridP1(event: MouseEvent): Unit = {
-    var  node: Node = event.getPickResult.getIntersectedNode
+    var node: Node = event.getPickResult.getIntersectedNode
     var x = GridPane.getColumnIndex(node)
     var y = GridPane.getRowIndex(node)
     if(node.toString == "Grid hgap=5.0, vgap=5.0, alignment=TOP_LEFT") println("gap")
@@ -583,16 +601,17 @@ class welcomeFXController extends Initializable {
     var fileName: String = gameName
     val origFileName: String = gameName
     var index: Int = 0
+    // Falls das file bereits existiert, wird es nicht überschrieben
     while (Files.exists(Paths.get(s"C:/Workspace/battleships/src/main/scala/Battleships/Saves/${fileName}.txt"))) {
       fileName = origFileName + index
       index += 1
     }
     val file: PrintWriter = new PrintWriter(new File(s"C:/Workspace/battleships/src/main/scala/Battleships/Saves/${fileName}.txt"))
     file.write(
-      s"${player1.name} ${player2.name} ${gameStatus} ${player1_zerstoert} ${player2_zerstoert} ${battleShips_Amount} ${submarines_Amount} ${cruisers_Amount} ${player2_fleet.shipsPos} ${player2_fleet.shipsPos} ${player1.shots} ${player2.shots} ${player1.takenshots} ${player2.takenshots} ${gameName} ${player1_fleet_orig.shipsPos} ${player2_fleet_orig.shipsPos}")
+      s"${player1.name}@${player2.name}@${turn}@${player1_zerstoert}@${player2_zerstoert}@${battleShips_Amount}@${submarines_Amount}@${cruisers_Amount}@${player1_fleet.shipsPos}@${player2_fleet.shipsPos}@${player1.shots}@${player2.shots}@${player1.takenshots}@${player2.takenshots}@${gameName}@${player1_fleet_orig.shipsPos}@${player2_fleet_orig.shipsPos}@${player1.noHits}@${player2.noHits}@${player1.hits}@${player2.hits}")
     file.close()
 
-
+    //Der Name des zuletzt gespeicherten Spiels wird vermerkt
     val lastBattle = new PrintWriter(new File("C:/Workspace/battleships/src/main/scala/Battleships/Saves/lastBattle.txt"))
     lastBattle.write(s"${fileName}")
     lastBattle.close()
@@ -605,21 +624,31 @@ class welcomeFXController extends Initializable {
     val lastBattle: String = lastBattleFile.getLines().mkString
     lastBattleFile.close()
     val file: BufferedSource = Source.fromFile(s"C:/Workspace/battleships/src/main/scala/Battleships/Saves/${lastBattle}.txt")
-    val content: Array[String] = file.getLines().mkString.split(" ")
+    val content: Array[String] = file.getLines().mkString.split("@")
     file.close()
 
-    var shotPos1: Seq[String] = content(1).filter(_.isDigit).map(_ + "")
-    var shotPos2: Seq[String] = content(4).filter(_.isDigit).map(_ + "")
 
     player1.name = content(0)
-    player2.name = content(3)
-
-    player1.shots = mkListOfPos(shotPos1)
-    player2.shots = mkListOfPos(shotPos2)
-    player1_fleet.shipsPos = mkListOfListOfPos(content(2))
-    player2_fleet.shipsPos = mkListOfListOfPos(content(5))
-    player1_fleet_orig.shipsPos = mkListOfListOfPos(content(6))
-    player2_fleet_orig.shipsPos = mkListOfListOfPos(content(7))
+    player2.name = content(1)
+    turn = content(2).toInt
+    player1_zerstoert = content(3).toInt
+    player2_zerstoert = content(4).toInt
+    battleShips_Amount = content(5).toInt
+    submarines_Amount = content(6).toInt
+    cruisers_Amount = content(7).toInt
+    player1_fleet = mkListOfListOfPos(content(8))
+    player2_fleet = mkListOfListOfPos(content(9))
+    player1.shots = mkListOfPos(mkSeqString(content(10)))
+    player2.shots = mkListOfPos(mkSeqString(content(11)))
+    player1.takenshots = content(12).toInt
+    player2.takenshots = content(13).toInt
+    gameName = content(14)
+    player1_fleet_orig = mkListOfListOfPos(content(15))
+    player2_fleet_orig = mkListOfListOfPos(content(16))
+    player1.noHits = mkListOfPos(mkSeqString(content(17))).filter(_!=Position(0,0))
+    player2.noHits = mkListOfPos(mkSeqString(content(18))).filter(_!=Position(0,0))
+    player1.hits = mkListOfPos(mkSeqString(content(19))).filter(_!=Position(0,0))
+    player2.hits = mkListOfPos(mkSeqString(content(20))).filter(_!=Position(0,0))
 
     def mkListOfPos(seq: Seq[String]): List[Position] = {
       var index = 0
@@ -628,11 +657,11 @@ class welcomeFXController extends Initializable {
       var ListOfPos: List[Position] = List[Position]()
       while (index < seq.size) {
         if (index % 2 == 0) {
-          seqOfX :+ seq(index).toInt
+          seqOfX = seqOfX :+ seq(index).toInt
           index += 1
         }
         else {
-          seqOfY :+ seq(index).toInt
+          seqOfY = seqOfY :+ seq(index).toInt
           index += 1
         }
       }
@@ -645,10 +674,11 @@ class welcomeFXController extends Initializable {
       ListOfPos
     }
 
-    def mkListOfListOfPos(string: String): List[List[Position]] = {
+    def mkListOfListOfPos(string: String): Fleet = {
       var arrayString: Array[String] = string.split("List")
       var listOfListOfPos: List[List[Position]] = List[List[Position]]()
-      var index = 0
+      var fleet : Fleet = new Fleet(List(List(Position(0,0))))
+      var index = 1
 
       arrayString = arrayString.slice(2, arrayString.length)
       arrayString = arrayString.map(_.filter(_.isDigit))
@@ -658,8 +688,35 @@ class welcomeFXController extends Initializable {
         index += 1
       }
 
-      listOfListOfPos
+      fleet.addShip(listOfListOfPos)
+      fleet
     }
+
+    def mkSeqString(string: String): Seq[String] = {
+      var seqString: Seq[String] = string.filter(_.isDigit).map(_ + "")
+      seqString
+    }
+
+    gameStart.setManaged(true)
+    gameStart.setVisible(true)
+    if(isEven(turn)) {
+      player2_Grid.setManaged(true)
+      player2_Grid.setVisible(true)
+      player1_Grid.setManaged(false)
+      player1_Grid.setVisible(false)
+      turnLabel.setText(s"${player2.name}´s turn")
+    }else{
+      player1_Grid.setManaged(true)
+      player1_Grid.setVisible(true)
+      player2_Grid.setManaged(false)
+      player2_Grid.setVisible(false)
+      turnLabel.setText(s"${player1.name}´s turn")
+    }
+
+    player1.hits.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y - 1 == 0) null else coords.y - 1, player1_Grid).setStyle("-fx-background-color: #C43235"))
+    player1.noHits.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y - 1 == 0) null else coords.y - 1, player1_Grid).setStyle("-fx-background-color: #36403B"))
+    player2.hits.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y - 1 == 0) null else coords.y - 1, player2_Grid).setStyle("-fx-background-color: #C43235"))
+    player2.noHits.foreach(coords => getNode(if (coords.x - 1 == 0) null else coords.x - 1, if (coords.y -   1 == 0) null else coords.y - 1, player2_Grid).setStyle("-fx-background-color: #36403B"))
 
 
   }

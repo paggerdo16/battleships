@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -21,7 +23,7 @@
                     </font>
                 </Text>
                 <Button alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="80.0" mnemonicParsing="false" onAction="#startSetup" prefHeight="80.0" prefWidth="450.0" styleClass="btn-welcome" text="START NEW GAME" textAlignment="CENTER" />
-                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="180.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="450.0" styleClass="btn-welcome" text="LOAD GAME" textAlignment="CENTER" />
+                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="180.0" mnemonicParsing="false" onAction="#load" prefHeight="80.0" prefWidth="450.0" styleClass="btn-welcome" text="LOAD GAME" textAlignment="CENTER" />
                 <Button alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="280.0" mnemonicParsing="false" onAction="#showScore" prefHeight="80.0" prefWidth="450.0" styleClass="btn-welcome" text="SCOREBOARD" textAlignment="CENTER" />
                 <Button alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="380.0" mnemonicParsing="false" onAction="#showCredits" prefHeight="80.0" prefWidth="450.0" styleClass="btn-welcome" text="CREDITS" textAlignment="CENTER" />
             </children>
@@ -30,8 +32,8 @@
 
         <AnchorPane fx:id="setupgame" layoutX="7.0" layoutY="7.0" prefHeight="500.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="80.0" text="Main menu" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
-                <Label fx:id="battleNameLabel" alignment="CENTER" layoutY="50.0" prefHeight="45.0" prefWidth="600.0" text="Name of Battle">
+                <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="30.0" styleClass="btn-home" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
+                <Label fx:id="battleNameLabel" alignment="CENTER" layoutX="80.0" layoutY="50.0" prefHeight="45.0" prefWidth="440.0" text="Name of Battle">
                     <font>
                         <Font size="25.0" />
                     </font>
@@ -90,13 +92,13 @@
 
         <AnchorPane fx:id="game" prefHeight="500.0" prefWidth="600.0" styleClass="background-game" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="80.0" text="Main menu" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
-                <Label fx:id="player" alignment="CENTER" layoutX="-68.0" layoutY="32.0" prefHeight="45.0" prefWidth="581.0" styleClass="player-name" text="PLAYER 1">
+            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="30.0" styleClass="btn-home" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
+                <Label fx:id="player" alignment="CENTER" layoutX="123.0" layoutY="32.0" prefHeight="45.0" prefWidth="200.0" styleClass="player-name" text="PLAYER 1">
                     <font>
                         <Font size="25.0" />
                     </font>
                 </Label>
-                <Label fx:id="setupLabel" alignment="CENTER_RIGHT" layoutX="378.0" layoutY="55.0" prefHeight="45.0" prefWidth="200.0" styleClass="player-name">
+                <Label fx:id="setupLabel" alignment="CENTER_RIGHT" layoutX="378.0" layoutY="60.0" prefHeight="40.0" prefWidth="200.0" styleClass="player-name">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -105,6 +107,7 @@
                 <Button fx:id="placeCruiser" alignment="CENTER_RIGHT" cacheShape="false" centerShape="false" layoutX="430.0" layoutY="136.0" mnemonicParsing="false" onAction="#placeShip" prefHeight="30.0" prefWidth="150.0" scaleShape="false" styleClass="btn-place" text="Place a Cruiser" textAlignment="RIGHT" />
                 <Button fx:id="placeSubmarine" alignment="CENTER_RIGHT" cacheShape="false" centerShape="false" layoutX="430.0" layoutY="176.0" mnemonicParsing="false" onAction="#placeShip" pickOnBounds="false" prefHeight="30.0" prefWidth="150.0" scaleShape="false" styleClass="btn-place" text="Place a Submarine" textAlignment="RIGHT" />
                 <Button fx:id="dirBtn" cacheShape="false" centerShape="false" focusTraversable="false" layoutX="430.0" layoutY="218.0" mnemonicParsing="false" onAction="#changeDir" pickOnBounds="false" prefHeight="150.0" prefWidth="150.0" scaleShape="false" styleClass="btn-dir" textFill="#c4a03e" />
+            <Button fx:id="confBtn" cacheShape="false" centerShape="false" focusTraversable="false" layoutX="430.0" layoutY="380.0" mnemonicParsing="false" onAction="#confirm" pickOnBounds="false" prefHeight="70.0" prefWidth="150.0" scaleShape="false" styleClass="btn-place" text="Confirm" />
                 <GridPane fx:id="battleGrid" hgap="5.0" layoutX="137.0" layoutY="217.0" onMouseClicked="#getcord" prefHeight="380.0" prefWidth="380.0" vgap="5.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="40.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -182,13 +185,13 @@
 
         <AnchorPane fx:id="gameStart" prefHeight="500.0" prefWidth="600.0" styleClass="background-game" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="80.0" text="Main menu" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
-                <Label fx:id="turnLabel" alignment="CENTER" layoutX="-68.0" layoutY="32.0" prefHeight="45.0" prefWidth="581.0" styleClass="player-name" text="PLAYER 1">
+            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="30.0" styleClass="btn-home" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
+                <Label fx:id="turnLabel" alignment="CENTER" layoutX="123.0" layoutY="32.0" prefHeight="45.0" prefWidth="200.0" styleClass="player-name" text="PLAYER 1">
                     <font>
                         <Font size="25.0" />
                     </font>
                 </Label>
-            <Button layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="20.0" prefWidth="20.0" styleClass="btn-save" AnchorPane.rightAnchor="117.0" AnchorPane.topAnchor="40.0" />
+            <Button layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="30.0" styleClass="btn-save" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="35.0" />
                 <GridPane fx:id="player2_Grid" hgap="5.0" layoutX="147.0" layoutY="227.0" onMouseClicked="#shootGridP2" prefHeight="380.0" prefWidth="380.0" vgap="5.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="40.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -335,17 +338,26 @@
         </AnchorPane>
       <AnchorPane fx:id="scoreboard" layoutX="10.0" layoutY="10.0" prefHeight="500.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="80.0" text="Main menu" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
+            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="30.0" styleClass="btn-home" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
             <Text fx:id="title1" boundsType="LOGICAL_VERTICAL_CENTER" fill="#0d0d0d" layoutX="150.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard" wrappingWidth="326.9830722808838">
                <font>
                   <Font size="34.0" />
                </font>
             </Text>
+            <TableView layoutX="50.0" layoutY="100.0" prefHeight="350.0" prefWidth="500.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Date" />
+                <TableColumn prefWidth="86.5" text="Winner" />
+                  <TableColumn prefWidth="148.5" text="Game name" />
+                  <TableColumn prefWidth="125.0" text="Number of moves" />
+                  <TableColumn prefWidth="64.0" text="Replay" />
+              </columns>
+            </TableView>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="credits" layoutX="20.0" layoutY="20.0" prefHeight="500.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="80.0" text="Main menu" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
+            <Button mnemonicParsing="false" onAction="#gotoMenu" prefHeight="30.0" prefWidth="30.0" styleClass="btn-home" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0" />
             <Text fx:id="title11" boundsType="LOGICAL_VERTICAL_CENTER" fill="#0d0d0d" layoutX="150.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Credits" wrappingWidth="326.9830722808838">
                <font>
                   <Font size="34.0" />
@@ -353,7 +365,7 @@
             </Text>
          </children>
       </AnchorPane>
-        <AnchorPane fx:id="blenderAnch" prefHeight="500.0" prefWidth="600.0" styleClass="pane-blender">
+        <AnchorPane fx:id="blenderAnch" prefHeight="500.0" prefWidth="600.0" styleClass="pane-blender" visible="false">
             <children>
                 <Pane fx:id="blender" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>

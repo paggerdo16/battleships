@@ -3,6 +3,8 @@ package Battleships.model
 case class Player (playername : String) {
   var name = playername
   var shots = List(Position(0, 0))
+  var hits = List(Position(0,0))
+  var noHits = List(Position(0,0))
   var takenshots = 0 //besser als length von shots zu nehmen
 
   def getShot(turn: Int) = { //function fürn slider
@@ -23,6 +25,7 @@ case class Player (playername : String) {
         var PosList = getElemListPos(flotte.shipsPos,i)
         if(findElemPos(shotPos,PosList) != Position(0,0)){
           result = 1 // /println("Das Schiff " + i + " wurde an der Koordinate " + shotPos + " getroffen." + PosList.length)
+          hits = hits ::: List(shotPos)
           if(PosList.length == 1) result = 2 //println("Ein Schiff wurde zerstört !") //Wenn zum Zeitpunkt des Treffers die länge der betroffenen Liste eins ist ist danach das Schiff zerstört ;)
           flotte.removeHit(shotPos) //Wenn Treffer wird Koordinate entfernt
         }
@@ -30,6 +33,7 @@ case class Player (playername : String) {
       }
       takenshots += 1 //egal ob getroffen oder nicht takenshots wird um 1 erhöht
       shots = shots ::: List(shotPos) //der Schuss wird der Liste angefügt
+      if(result==3)noHits = noHits ::: List(shotPos)
       result
     }
   }

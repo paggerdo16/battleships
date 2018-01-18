@@ -32,9 +32,15 @@
 
   .btn-save{
     -fx-background-image: url("pics/save.png");
-    -fx-background-size: 20px,20px;
+    -fx-background-size: 30px,30px;
     -fx-opacity: 0.7;
   }
+
+  .btn-home{
+    -fx-background-image: url("pics/home.png");
+    -fx-background-size: 30px,30px;
+    -fx-opacity: 0.7;
+    }
 
  .pane-normal {
     -fx-background-color: #62BCFA;
