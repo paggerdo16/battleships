@@ -1,17 +1,36 @@
 
- .background-game {
+.background-game {
     -fx-background-image: url("pics/bg-game.jpg");
     -fx-background-size: 610px,600px;
- }
+}
 
- .player-name {
+.player-name {
     -fx-text-color: #62BCFA;
     -fx-font-family: sans-serif;
     -fx-font-weight: bolder;
     -fx-opacity: 0.9;
- }
+}
 
- .btn-place {
+.background-welcome{
+    -fx-background-color: yellow;
+    -fx-background-image: url("pics/bg-welcome.jpg");
+    -fx-background-size: 610px,600px;
+}
+.btn-welcome{
+    -fx-background-image: url("pics/buttonWood.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-family: sans-serif;
+    -fx-font-size: 20;
+    -fx-font-weight: bolder;
+    -fx-background-width: 450px;
+    -fx-background-height: 80px;
+    -fx-background-insets: 0,1,4,5,6;
+    -fx-background-radius: 9,8,5,4,3;
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.4), 5, 0.0 , 0 , 1 );
+
+}
+
+.btn-place {
     -fx-background-image: url("pics/btn-wood.png");
     -fx-text-fill: #c4a03e;
     -fx-font-size: 17px;
@@ -19,47 +38,51 @@
     -fx-font-weight: bolder;
     -fx-opacity: 0.9;
     -fx-background-size: 150px;
- }
+}
 
-  .btn-dir{
-      -fx-background-image: url("pics/dirBtn-Block.png");
-      -fx-text-color: #62BCFA;
-      -fx-font-size: 15px;
-      -fx-font-family: sans-serif;
-      -fx-font-weight: bolder;
-      -fx-opacity: 0.9;
-  }
+.btn-dir{
+    -fx-background-image: url("pics/dirBtn-Block.png");
+    -fx-text-color: #62BCFA;
+    -fx-font-size: 15px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+}
 
-  .btn-save{
+.btn-save{
     -fx-background-image: url("pics/save.png");
     -fx-background-size: 30px,30px;
     -fx-opacity: 0.7;
-  }
+}
 
-  .btn-home{
+.btn-home{
     -fx-background-image: url("pics/home.png");
     -fx-background-size: 30px,30px;
     -fx-opacity: 0.7;
-    }
+}
 
- .pane-normal {
+.pane-normal {
     -fx-background-color: #62BCFA;
     -fx-background-radius: 1,1,1;
     -fx-opacity: 0.8;
- }
+}
 
- .pane-hit{
+.pane-hit{
     -fx-background-color: #C43235;
     -fx-background-radius: 5,5,4;
- }
+}
 
- .pane-miss{
-     -fx-background-color: #36403B;
-     -fx-background-radius: 5,5,4;
- }
+.pane-miss{
+    -fx-background-color: #36403B;
+    -fx-background-radius: 5,5,4;
+}
 
- .pane-blender{
-     -fx-background-color: #36403B;
- }
+.pane-blender{
+    -fx-background-color: #36403B;
+}
+
+.vid{
+    -fx-background-image: url("pics/ship.gif");
+}
 
 

@@ -8,6 +8,7 @@ import java.util.ResourceBundle
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Button, Label, TextField}
 import javafx.scene.input.MouseEvent
+import javafx.scene.media.{Media, MediaPlayer}
 
 import scala.io.{BufferedSource, Source}
 import Battleships.model.{Fleet, Player, Position}
@@ -20,6 +21,8 @@ class welcomeFXController extends Initializable {
   @FXML private var game: AnchorPane = _
   @FXML private var scoreboard: AnchorPane = _
   @FXML private var credits: AnchorPane = _
+  @FXML private var vidpane: AnchorPane = _
+
 
   //Our Setupfields and Button
   @FXML private var battleNameLabel: Label = _
@@ -48,6 +51,12 @@ class welcomeFXController extends Initializable {
   @FXML private var player1_Grid: GridPane = _
   @FXML private var player2_Grid: GridPane = _
   @FXML private var turnLabel: Label = _
+
+  //Video player
+  import javafx.fxml.FXML
+  import javafx.scene.media.MediaView
+
+  @FXML private val mediaView = null
 
   //Blender
   @FXML private var blenderAnch: AnchorPane = _
@@ -91,6 +100,9 @@ class welcomeFXController extends Initializable {
   override def initialize(url: URL, rb: ResourceBundle): Unit = initGame()
 
   def initGame(): Unit = {
+    //Hide Start screen
+    rootpane.setVisible(false)
+    rootpane.setManaged(false)
     //HIDE OUR OTHER STATES
     setupgame.setVisible(false)
     setupgame.setManaged(false)
@@ -108,6 +120,13 @@ class welcomeFXController extends Initializable {
     //Hide Credits
     credits.setVisible(false)
     credits.setManaged(false)
+  }
+
+  @FXML private def startMenu(event: MouseEvent): Unit = {
+    vidpane.setVisible(false)
+    vidpane.setManaged(false)
+    rootpane.setVisible(true)
+    rootpane.setManaged(true)
   }
 
   @FXML private def startSetup(event: ActionEvent): Unit = {
@@ -768,7 +787,6 @@ class welcomeFXController extends Initializable {
       }
     }
   }
-
 }
 
 
