@@ -30,8 +30,69 @@
 
 }
 
+
 .btn-place {
     -fx-background-image: url("pics/btn-wood.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-size: 17px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+    -fx-background-size: 150px;
+}
+
+.btn-place-battleship {
+    -fx-background-image: url("pics/btn-wood-bs.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-size: 17px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+    -fx-background-size: 150px;
+}
+
+.btn-place-cruiser {
+    -fx-background-image: url("pics/btn-wood-cr.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-size: 17px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+    -fx-background-size: 150px;
+}
+
+.btn-place-subm {
+    -fx-background-image: url("pics/btn-wood-sm.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-size: 17px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+    -fx-background-size: 150px;
+}
+
+.Label-battleship {
+    -fx-background-image: url("pics/remainBS.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-size: 17px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+    -fx-background-size: 150px;
+}
+
+.Label-cruiser {
+    -fx-background-image: url("pics/remainCR.png");
+    -fx-text-fill: #c4a03e;
+    -fx-font-size: 17px;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bolder;
+    -fx-opacity: 0.9;
+    -fx-background-size: 150px;
+}
+
+.Label-subm {
+    -fx-background-image: url("pics/remainSM.png");
     -fx-text-fill: #c4a03e;
     -fx-font-size: 17px;
     -fx-font-family: sans-serif;
@@ -75,10 +136,6 @@
 .pane-miss{
     -fx-background-color: #36403B;
     -fx-background-radius: 5,5,4;
-}
-
-.pane-blender{
-    -fx-background-color: #36403B;
 }
 
 .vid{

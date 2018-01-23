@@ -31,8 +31,8 @@ class welcomeFXController extends Initializable {
   @FXML private var battleShips: TextField = _
   @FXML private var cruisers: TextField = _
   @FXML private var submarines: TextField = _
-  @FXML private var confirm: Button = _
   @FXML private var setupError: Label = _
+  @FXML private var saveBtn: Button = _
 
   //OUR GAME COMPONENTS
   @FXML private var player: Label = _
@@ -44,23 +44,16 @@ class welcomeFXController extends Initializable {
   @FXML private var placeCruiser: Button = _
   @FXML private var placeSubmarine: Button = _
   @FXML private var dirBtn: Button = _
-  @FXML private var confBtn: Button = _
 
   //BattleGridPanes and needed fields
   @FXML private var gameStart: AnchorPane = _
   @FXML private var player1_Grid: GridPane = _
   @FXML private var player2_Grid: GridPane = _
   @FXML private var turnLabel: Label = _
-
-  //Video player
-  import javafx.fxml.FXML
-  import javafx.scene.media.MediaView
-
-  @FXML private val mediaView = null
-
-  //Blender
-  @FXML private var blenderAnch: AnchorPane = _
-  @FXML private var blender: Pane = _
+  @FXML private var remainBS: Label = _
+  @FXML private var remainCR: Label = _
+  @FXML private var remainSM: Label = _
+  @FXML private var endScreen: Pane = _
 
   //Save our setupinfoin these vars
   var battleField_Size: Int = _
@@ -111,9 +104,6 @@ class welcomeFXController extends Initializable {
     //game Starting
     gameStart.setVisible(false)
     gameStart.setManaged(false)
-    //Disable our Blenders
-    blenderAnch.setVisible(false) //SIND JZ DISABLED bind ma noch a funktion dran digga
-    blenderAnch.setManaged(false)
     //Hide Scoreboard
     scoreboard.setVisible(false)
     scoreboard.setManaged(false)
@@ -164,8 +154,6 @@ class welcomeFXController extends Initializable {
     game.setManaged(false)
     gameStart.setVisible(false)
     gameStart.setManaged(false)
-    blenderAnch.setVisible(false)
-    blenderAnch.setManaged(false)
     scoreboard.setVisible(false)
     scoreboard.setManaged(false)
     credits.setVisible(false)
@@ -513,12 +501,17 @@ class welcomeFXController extends Initializable {
   def startgame(starter: Int): Unit = {
     gameStart.setManaged(true)
     gameStart.setVisible(true)
+    endScreen.setVisible(false)
     if (isEven(starter)) { //player 1 ones turn so player 2 Grid is active
       turnLabel.setText(player2.name + " starts!")
       player1_Grid.setManaged(false)
       player1_Grid.setVisible(false)
       player2_Grid.setManaged(true)
       player2_Grid.setVisible(true)
+      remainBS.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),0).toString+ "   ")
+      remainCR.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),1).toString+ "   ")
+      remainSM.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),2).toString+ "   ")
+
     }
     if (!isEven(starter)) { //player 2 ones turn so player 1 Grid is active
       turnLabel.setText(player1.name + " starts!")
@@ -526,11 +519,18 @@ class welcomeFXController extends Initializable {
       player1_Grid.setVisible(true)
       player2_Grid.setManaged(false)
       player2_Grid.setVisible(false)
+      remainBS.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),0).toString+ "   ")
+      remainCR.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),1).toString+ "   ")
+      remainSM.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),2).toString+ "   ")
     }
   }
 
   @FXML private def shootGridP1(event: MouseEvent): Unit = {
     var node: Node = event.getPickResult.getIntersectedNode
+    print(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos))
+    print(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),1))
+    println("")
+    print(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos))
     var x = GridPane.getColumnIndex(node)
     var y = GridPane.getRowIndex(node)
     if(node.toString == "Grid hgap=5.0, vgap=5.0, alignment=TOP_LEFT") println("gap")
@@ -547,13 +547,20 @@ class welcomeFXController extends Initializable {
           println("You destroyed a ship!")
           node.setStyle("-fx-background-color: #C43235")
           player1_zerstoert += 1
+          remainBS.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),0).toString+ "   ")
+          remainCR.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),1).toString+ "   ")
+          remainSM.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),2).toString+ "   ")
           if (player1_zerstoert == battleShips_Amount + submarines_Amount + cruisers_Amount) {
             end(0)
+
           }
         }
         case 3 => {
           println("You missed")
           node.setStyle("-fx-background-color: #36403B")
+          remainBS.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),0).toString+ "   ")
+          remainCR.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),1).toString+ "   ")
+          remainSM.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),2).toString+ "   ")
           player1_Grid.setManaged(false)
           player1_Grid.setVisible(false)
           player2_Grid.setManaged(true)
@@ -583,6 +590,9 @@ class welcomeFXController extends Initializable {
           println("You destroyed a ship!")
           node.setStyle("-fx-background-color: #C43235")
           player2_zerstoert += 1
+          remainBS.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),0).toString+ "   ")
+          remainCR.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),1).toString+ "   ")
+          remainSM.setText(getElem(currentShips(player1_fleet_orig.shipsPos,player1_fleet.shipsPos),2).toString+ "   ")
           if (player2_zerstoert == battleShips_Amount + submarines_Amount + cruisers_Amount) {
             end(1)
           }
@@ -590,6 +600,9 @@ class welcomeFXController extends Initializable {
         case 3 => {
           println("You missed")
           node.setStyle("-fx-background-color: #36403B")
+          remainBS.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),0).toString+ "   ")
+          remainCR.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),1).toString+ "   ")
+          remainSM.setText(getElem(currentShips(player2_fleet_orig.shipsPos,player2_fleet.shipsPos),2).toString+ "   ")
           //versteck die das jetzige gridpane zeig das neue gg
           player1_Grid.setManaged(true)
           player1_Grid.setVisible(true)
@@ -607,6 +620,12 @@ class welcomeFXController extends Initializable {
     player1_Grid.setVisible(false)
     player2_Grid.setManaged(false)
     player2_Grid.setVisible(false)
+    endScreen.setVisible(true)
+    remainBS.setVisible(false)
+    remainCR.setVisible(false)
+    remainSM.setVisible(false)
+    saveBtn.setVisible(false)
+    saveBtn.setManaged(false)
     if (i == 0) {
       turnLabel.setText(player1.name + " won!")
     }
@@ -787,6 +806,45 @@ class welcomeFXController extends Initializable {
       }
     }
   }
+  def currentShips (origFleet :List[List[Position]],fleet : List[List[Position]]) : List[Int] = {
+    var i = origFleet.length
+    var amountBattleships : Int = 0
+    var amountCruisers : Int = 0
+    var amountSubmarines : Int = 0
+    while(i>0){
+      getShip(origFleet,i).length match{
+        case 5 => {
+          if(getShip(fleet,i).length > 0) amountBattleships = amountBattleships +1
+        }
+        case 3 => {
+          if(getShip(fleet,i).length > 0) amountCruisers= amountCruisers +1
+        }
+        case 2 => {
+          if(getShip(fleet,i).length > 0) amountSubmarines= amountSubmarines +1
+        }
+        case 1 =>{
+
+        }
+      }
+      i = i-1
+    }
+    List(amountBattleships,amountCruisers,amountSubmarines)
+  }
+
+  def getShip(list: List[List[Position]],index:Int): List[Position]={
+    index match{
+      case 1 => list.head
+      case _=> getShip(list.tail,index-1)
+    }
+  }
+
+  def getElem(list: List[Any],index:Int): Any={
+    index match{
+      case 0 => list.head
+      case _=> getElem(list.tail,index-1)
+    }
+  }
 }
+
 
 

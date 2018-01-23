@@ -26,5 +26,4 @@ class BattleShipFX extends Application {
     stage.setResizable(false) //damit ma uns alle ka scheiße antun müssn
     stage.show()
   }
-
 }
